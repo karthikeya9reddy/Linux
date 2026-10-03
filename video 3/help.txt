@@ -1,0 +1,591 @@
+1. The Three Main Goals of Video 3
+This video focuses on three things:
+1. Getting help with Linux commands
+2. Understanding the terminal and shell
+3. Using commands to learn more about the Linux system
+The most important lesson is:
+Learning Linux means learning how to find answers yourself.
+
+You will constantly encounter commands or tools you don't know. Instead of memorizing everything, learn how to get help.
+2. Terminal vs Terminal Emulator vs Shell
+This is probably the biggest source of confusion in this video.
+Terminal
+Historically, a terminal was a physical device consisting of things like:
+Keyboard
+   +
+Screen/Monitor
+
+It allowed a person to interact with a computer.
+The video uses the VT100 as an example.
+3. Terminal Emulator
+What you're opening in Parrot or Ubuntu is technically a:
+Terminal emulator
+
+It's a graphical application that emulates/pretends to be a traditional physical terminal.
+For example:
+Your computer
+     ↓
+Terminal Emulator
+     ↓
+Shell
+     ↓
+Linux Kernel / OS
+
+So when you open your terminal application, you're not literally opening an old physical terminal.
+You're using software that behaves like one.
+4. Shell
+The shell is the actual interface through which you interact with the operating system using commands.
+Think:
+Terminal Emulator
+        ↓
+      Shell
+        ↓
+   Linux Kernel
+        ↓
+     Hardware
+
+The terminal emulator gives you access to the shell.
+The shell interprets your commands and interacts with the operating system.
+5. Bash
+The shell being used in the video is:
+Bash
+
+Bash stands for:
+Bourne Again Shell
+
+It is one of the most commonly encountered Linux shells.
+So when you're using your normal Parrot terminal, you may be using:
+Terminal emulator → Bash shell
+
+6. There Are Different Shells
+Bash isn't the only shell.
+The video mentions examples such as:
+bash
+zsh
+fish
+PowerShell
+
+Some of the funny examples in the video were jokes, so don't worry about those. 😂
+The important idea is:
+Linux can have different shells.
+
+7. ps — Process Status
+The video introduces:
+ps
+
+ps stands for:
+Process Status
+
+It lists processes currently running on the system.
+For example:
+ps
+
+may show something like:
+PID    TTY      TIME     CMD
+1234   pts/0    ...      bash
+
+If you see:
+bash
+
+that indicates Bash is running as your shell.
+8. PowerShell Can Run on Linux
+The video demonstrates that PowerShell isn't restricted to Windows.
+PowerShell can also run on Linux.
+When PowerShell is running, the process may appear as:
+pwsh
+
+So:
+Bash → bash
+PowerShell → pwsh
+
+This is another example of the distinction between the shell and the terminal emulator.
+9. What Do We Call It?
+You may hear people casually say:
+- Terminal
+- Bash
+- Shell
+- Console
+People often use these terms interchangeably.
+Technically, however:
+Terminal emulator → graphical application
+Shell              → command interface
+Bash               → a specific shell
+
+So if you want to be technically precise:
+"I'm using a terminal emulator running the Bash shell."
+
+10. Understanding Your Terminal Prompt
+When you open a shell, you'll usually see information such as:
+username@hostname:directory$
+
+For example:
+parrot@parrot:~$
+
+This tells you several things.
+Username
+parrot
+
+Who you're logged in as.
+@
+Separates the username from the hostname.
+Hostname
+parrot
+
+The name of the Linux machine.
+Current directory
+You may see something like:
+~
+
+or:
+/home/parrot
+
+This tells you where you are in the filesystem.
+It's essentially the same information you can obtain with:
+pwd
+
+11. $ vs #
+This is very important.
+When you're logged in as a normal user, your prompt commonly ends with:
+$
+
+Example:
+parrot@parrot:~$
+
+When you're logged in as the root user, the prompt commonly ends with:
+#
+
+Example:
+root@parrot:~#
+
+Why is this important?
+Root has extremely powerful privileges.
+You can think:
+$ → normal user
+# → root user
+
+Seeing # should make you think:
+Be careful.
+
+A mistake as root can affect the entire system.
+12. Commands Introduced in This Video
+The instructor quickly introduces many commands.
+Don't try to memorize all of them immediately.
+The important thing is knowing how to look them up.
+13. id
+id
+
+Displays information about the current user/account.
+It can show information such as:
+- User ID
+- Group ID
+- Groups
+Think:
+id → Tell me about my user identity.
+
+14. hostname
+hostname
+
+Displays the hostname of the machine.
+Example:
+parrot
+
+Think:
+hostname → What's this computer called?
+
+15. uname
+uname
+
+Displays basic system information.
+By itself, it commonly returns:
+Linux
+
+But uname becomes much more useful when combined with options.
+For example, a commonly used option is:
+uname -a
+
+which provides more system information.
+16. ifconfig
+ifconfig
+
+A command for viewing/configuring network interfaces.
+The video categorizes it as:
+Network stuff.
+
+⚠️ On modern Linux systems, ifconfig may not be installed by default or may be considered an older tool.
+Don't worry about that yet—the important thing for this video is recognizing it as a networking command.
+17. ip
+ip
+
+Another major networking command.
+It can be used for things such as:
+- Network interfaces
+- IP addresses
+- Routes
+- Network configuration
+You will encounter this command a lot when you start learning Linux networking.
+18. netstat
+netstat
+
+Used for viewing network-related information/status.
+The video introduces it as:
+Network status.
+
+It can be useful for examining things such as network connections and listening services.
+19. ss
+ss
+
+Another networking command.
+It can display information about network sockets/connections.
+Think:
+ss → socket/network connection information
+
+20. ps
+You already saw this earlier:
+ps
+
+It shows running processes.
+Remember:
+ps → Process Status
+
+21. who
+who
+
+Shows users currently logged into the system.
+The video describes it as somewhat related to:
+whoami
+
+but they are different.
+whoami
+whoami
+
+→ Who am I?
+who
+who
+
+→ Who else is logged in?
+That's an important distinction.
+22. env
+env
+
+Displays environment variables.
+Environment variables are values maintained by the environment in which programs run.
+You'll learn more about these later in the course.
+For now:
+env → show environment variables
+
+23. lsblk
+lsblk
+
+Means:
+List Block Devices
+
+It's used to display block devices such as storage devices and partitions.
+This connects directly to what you learned in Video 2 about:
+/dev
+
+and things like:
+/dev/sda
+/dev/sda1
+
+You can use:
+lsblk
+
+to get a much clearer overview of your disks and partitions.
+24. lsusb
+lsusb
+
+Lists USB devices connected to the system.
+Think:
+lsusb → list USB devices
+
+For example, it can help you determine whether Linux detects connected USB hardware.
+25. lsof
+lsof
+
+Means:
+List Open Files
+
+It lists files that are currently open by processes.
+Remember the Linux concept from Video 2:
+Everything is a file.
+
+Because Linux treats many things as files, lsof can provide a huge amount of information.
+26. The Important Part: You DON'T Need to Memorize These
+The instructor deliberately throws a bunch of commands at you quickly.
+That's intentional.
+The point is:
+You will forget commands. That's normal.
+
+Instead of trying to memorize:
+id
+hostname
+uname
+ifconfig
+ip
+netstat
+ss
+ps
+who
+env
+lsblk
+lsusb
+lsof
+
+learn how to look them up when you need them.
+And that's where the next section becomes extremely important.
+🆘 27. man — The Manual
+This is probably the most important command in Video 3.
+man command
+
+man means:
+Manual
+
+It opens the manual/documentation for a command.
+For example:
+man uname
+
+This gives you detailed information about:
+- What the command does
+- Description
+- Options
+- Switches
+- Usage
+28. Example: man ls
+man ls
+
+This opens the manual page for ls.
+You can similarly use:
+man ip
+
+or:
+man ps
+
+or:
+man cp
+
+29. Leaving a man Page
+When you're inside a manual page, press:
+q
+
+to quit.
+Remember:
+q → quit the man page
+
+This is one of those tiny things worth remembering.
+30. -h — Help Option
+Many Linux commands support:
+command -h
+
+For example:
+uname -h
+
+The -h option commonly requests help.
+However, not every command necessarily uses -h for help.
+31. --help
+Another common way to request help is:
+command --help
+
+For example:
+uname --help
+
+This generally provides a shorter overview of:
+- Available options
+- Switches
+- Basic usage
+Difference from man
+Think:
+man command
+    ↓
+Detailed manual/documentation
+
+command --help
+    ↓
+Quick reference
+
+32. -h vs --help
+You may see:
+command -h
+
+or:
+command --help
+
+The instructor explains that many commands support one or both.
+So don't assume every command behaves identically.
+If -h doesn't work, try:
+command --help
+
+or:
+man command
+
+33. apropos — Find a Command by Keyword
+This is another very useful command.
+What if you know what you want to accomplish but don't remember the command's name?
+That's what:
+apropos
+
+can help with.
+34. Example: Find USB Commands
+Suppose you remember:
+"I want to find a command related to USB devices, but I forgot its name."
+
+You can try:
+apropos usb
+
+It searches command descriptions/manual documentation for the keyword.
+You might discover:
+lsusb
+
+35. Example: Compression
+Suppose you want to find commands related to compression.
+You could run:
+apropos compress
+
+Linux searches its command documentation for relevant results.
+This can return several commands related to compression.
+36. The Three-Level Help System
+This is probably the best thing to put in your notes:
+When you don't know how to use a command:
+Level 1 — Quick help
+command --help
+
+or:
+command -h
+
+Level 2 — Full manual
+man command
+
+Level 3 — Don't know the command at all?
+apropos keyword
+
+So:
+I know the command
+        ↓
+--help / -h
+        ↓
+Need more detail
+        ↓
+man command
+        ↓
+I don't even know the command
+        ↓
+apropos keyword
+
+🔥 This is the core lesson of Video 3.
+🧠 Terminal Concepts — Quick Reference
+Term	Meaning
+Terminal	Historically, physical device used to interact with a computer
+Terminal emulator	Software that emulates a physical terminal
+Shell	Interface that lets you interact with the OS using commands
+Bash	A popular shell; Bourne Again Shell
+PowerShell	Microsoft's shell, which can also run on Linux
+Root	Linux's most privileged user
+$	Common prompt indicator for a normal user
+#	Common prompt indicator for root
+
+
+🛠️ Every Command From Video 3
+Here's your complete command list from the transcript:
+ps
+id
+hostname
+uname
+ifconfig
+ip
+netstat
+ss
+who
+whoami
+env
+lsblk
+lsusb
+lsof
+man
+q
+-h
+--help
+apropos
+
+And examples shown/discussed:
+man uname
+man ls
+man ip
+
+uname -h
+uname --help
+
+apropos usb
+apropos compress
+
+🎯 What You Actually Need to Remember
+Don't try to memorize 20 new commands today.
+Focus on these five ideas:
+1. ps
+ps
+
+What processes are running?
+2. man
+man command
+
+Give me the detailed manual.
+3. --help
+command --help
+
+Give me a quick reference.
+4. apropos
+apropos keyword
+
+I know what I want to do, but I don't know which command does it.
+5. Terminal vs Shell
+Terminal emulator
+       ↓
+     Shell
+       ↓
+Linux operating system
+
+And Bash is one type of shell.
+🔥 What You Learned in Video 3
+## Video 3 — Getting Help & Understanding the Terminal
+
+### Main concepts
+
+- A terminal emulator is software that emulates a physical terminal.
+- The shell is the interface used to interact with the operating system.
+- Bash (Bourne Again Shell) is a common Linux shell.
+- Linux can use different shells, including Bash and PowerShell.
+- The `$` prompt normally indicates a regular user.
+- The `#` prompt normally indicates the root user.
+- Root has extremely powerful privileges, so commands must be used carefully.
+
+### Commands learned
+
+- ps → process status
+- id → user/account identity information
+- hostname → display hostname
+- uname → system information
+- ifconfig → network interface information/configuration
+- ip → networking information/configuration
+- netstat → network status/connections
+- ss → socket/network information
+- who → users currently logged in
+- whoami → current user
+- env → environment variables
+- lsblk → list block devices
+- lsusb → list USB devices
+- lsof → list open files
+- man → command manual
+- q → quit a man page
+- -h → commonly used help option
+- --help → command help
+- apropos → search command documentation by keyword
+
+### Most important lesson
+
+I do NOT need to memorize every Linux command.
+
+I need to know how to find information:
+
+command --help
+man command
+apropos keyword
+
+Linux teaches me how to learn Linux.
