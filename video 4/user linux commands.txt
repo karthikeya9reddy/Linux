@@ -1,0 +1,623 @@
+🐧 Linux for Hackers — Video 4 Notes
+User Management, Groups & sudo
+🎯 Main purpose of Video 4
+This video teaches how to:
+- Create users
+- Delete users
+- Modify users
+- Set/change passwords
+- Create groups
+- Add users to groups
+- Remove users from groups
+- Understand sudo
+- Understand the root user
+- Understand the sudoers file
+- Give/restrict administrative privileges
+These are fundamental Linux administration and cybersecurity concepts.    Pasted text
+1. Linux Users
+Every Linux system has users.
+A user can:
+- Log into the system
+- Run programs
+- Create files
+- Delete things
+- Perform administrative actions if they have the required permissions
+Not every user has the same permissions.    Pasted text
+To find your current user:
+whoami
+
+Example:
+parrot
+
+2. adduser — Create a User
+Basic syntax:
+adduser username
+
+Example:
+sudo adduser thor
+
+adduser is a more interactive/user-friendly method.
+It asks for things such as:
+- Password
+- Full name
+- Other information
+You can generally press Enter through optional fields if you don't want to provide them.    Pasted text
+Important
+adduser and useradd both create users, but they behave differently.
+3. useradd — Another Way to Create Users
+Syntax:
+sudo useradd username
+
+Example:
+sudo useradd ironman
+
+Unlike adduser, useradd is more basic and doesn't automatically walk you through all the user information.
+The video describes it as the "lazy" option because it does less setup automatically.    Pasted text
+4. cat /etc/passwd
+Linux stores information about user accounts in:
+/etc/passwd
+
+You can view it with:
+cat /etc/passwd
+
+This shows the system's user accounts.    Pasted text
+You'll see entries that look complicated, but they contain useful information about each account.
+5. Understanding /etc/passwd
+A simplified entry looks something like:
+username:x:1001:1001:Full Name:/home/username:/bin/bash
+
+The important pieces introduced in the video are:
+username
+   ↓
+x
+   ↓
+UID
+   ↓
+GID
+   ↓
+user information
+   ↓
+home directory
+   ↓
+default shell
+
+x
+The x indicates that the password information is stored separately in the shadow file.    Pasted text
+6. /etc/shadow
+Password information is stored in:
+/etc/shadow
+
+Try:
+cat /etc/shadow
+
+A normal user may receive:
+Permission denied
+
+because this file contains sensitive authentication information.
+You need elevated privileges:
+sudo cat /etc/shadow
+
+The video shows that the password isn't displayed as plain text. Instead, you see a hashed representation.    Pasted text
+Important
+/etc/passwd
+    ↓
+User/account information
+
+/etc/shadow
+    ↓
+Password authentication information
+
+7. UID and GID
+In /etc/passwd, you'll see numbers such as:
+1001:1001
+
+These represent:
+UID
+User ID
+A numerical identifier assigned to the user.
+GID
+Group ID
+A numerical identifier associated with the user's group.
+The video demonstrates that when adduser creates a user, it also creates a group associated with that user.    Pasted text
+8. Home Directory
+A user normally has a home directory such as:
+/home/thor
+
+You can navigate there:
+cd /home
+ls
+
+Then:
+cd thor
+ls
+
+To show hidden files:
+ls -al
+
+The user's personal files and configuration are stored there.    Pasted text
+9. Default Shell
+A user's account also has a default shell.
+For example:
+/bin/bash
+
+The video shows that adduser creates the user with Bash as the default shell, while useradd can create an account with a different default shell such as sh, depending on how it is invoked/configured.    Pasted text
+10. passwd — Set or Change a Password
+The command is:
+passwd
+
+To set/change another user's password:
+sudo passwd username
+
+Example:
+sudo passwd ironman
+
+Then enter the new password.
+The video uses this to give the useradd-created account a password.    Pasted text
+11. useradd -m — Create a Home Directory
+The video demonstrates:
+sudo useradd -m hulk
+
+The:
+-m
+
+option tells useradd to create the user's home directory.
+This is important because basic useradd doesn't necessarily create the home directory automatically.
+The video uses this to quickly create several users.    Pasted text
+12. useradd -h
+You can see the available options for useradd with:
+useradd -h
+
+This shows you the available switches/options.
+Again, this connects directly to what you learned in Video 3:
+You don't have to memorize every option. Ask the command for help.    Pasted text
+
+13. usermod — Modify a User
+The command:
+usermod
+
+means user modification.
+It allows you to modify an existing user account.
+First, you can see its options with:
+usermod -h
+
+The video demonstrates changing the user's shell.
+14. usermod --shell
+Example:
+sudo usermod --shell /bin/bash ironman
+
+This changes the user's default shell.
+The video changes Iron Man's shell from sh to Bash.    Pasted text
+15. usermod -l — Change Username
+The -l option changes a user's login name.
+Example from the video:
+sudo usermod -l tony_stark ironman
+
+This changes:
+ironman → tony_stark
+
+The video then changes it back.    Pasted text
+16. sudo — Superuser Do
+This is one of the most important commands in Linux.
+sudo command
+
+sudo allows an authorized user to execute a command with elevated privileges, typically as root.
+Example:
+sudo adduser thor
+
+Without sudo, the normal user may receive:
+Only root may add a user/group
+
+With sudo, the authorized user can perform the action.    Pasted text
+Think of it as:
+normal user
+     ↓
+sudo
+     ↓
+temporary elevated privileges
+
+17. Root / Superuser
+The root user is the most privileged user on a Linux system.
+Root can perform extremely powerful operations, including:
+- Changing system settings
+- Creating/deleting users
+- Modifying files
+- Installing software
+- Changing permissions
+- Potentially damaging the entire system
+That's why root privileges must be treated carefully.    Pasted text
+18. Why sudo Is Powerful
+The video uses the "Infinity Gauntlet" analogy:
+sudo
+ ↓
+temporarily obtain root-level powers
+ ↓
+execute the command
+
+The important concept isn't the analogy itself.
+It's:
+You don't need to permanently log in as root to perform an administrative action.
+
+You can use sudo for the specific command that requires elevated privileges.    Pasted text
+19. su — Switch User
+The command:
+su
+
+allows you to switch to another user.
+Example:
+su - ironman
+
+This switches into Iron Man's account.
+Normally, you'll need that user's password.
+20. su -
+If you run:
+su -
+
+you're attempting to switch to the root user.
+The video instead demonstrates:
+sudo su -
+
+which uses your existing sudo privileges to become root.
+After becoming root, you can return to your previous user with:
+Ctrl + D
+
+or:
+exit
+
+The video strongly emphasizes that you generally shouldn't work as root unnecessarily; that's one reason sudo exists.    Pasted text
+21. Normal User vs Root
+Remember your Video 3 lesson:
+$ → normal user
+# → root
+
+So if you see:
+root@parrot:~#
+
+you should immediately think:
+I'm root. Be careful.
+
+22. sudoers File
+The sudoers file controls who is allowed to use sudo and what they are allowed to do.
+It is located at:
+/etc/sudoers
+
+This is a very important system configuration file.
+The video warns that incorrectly modifying it can break the system.    Pasted text
+23. Editing /etc/sudoers
+The video teaches that you should not casually edit /etc/sudoers with a normal text editor.
+It demonstrates:
+sudo visudo
+
+The transcript describes this as using vi through the sudoers-specific mechanism. The key lesson is:
+Use visudo to safely edit the sudoers configuration because it performs syntax checking.
+
+The video demonstrates deliberately creating a syntax error and shows that the editor catches the problem before allowing a broken configuration to be saved.    Pasted text
+⚠️ Important correction to keep in your notes
+The transcript says:
+sudo vi sudo
+
+but the standard command for safely editing /etc/sudoers is:
+sudo visudo
+
+The important concept from the video is the sudoers file and syntax checking, not memorizing the transcript's wording.
+24. Sudoers Rules
+The video demonstrates rules that can grant a user very powerful access.
+Conceptually:
+user → allowed systems → allowed commands
+
+For example, a rule can grant access to:
+ALL systems
+ALL commands
+
+or restrict someone to a specific command.
+This is an important security principle:
+Don't give users more privileges than they need.
+
+25. Principle of Least Privilege ⭐
+This is a very important cybersecurity concept.
+The principle of least privilege means:
+Give a user/process only the permissions necessary to perform its job.
+
+For example:
+Bad:
+User → access to everything
+
+Better:
+User → access only to required commands/resources
+
+The video applies this concept when removing unnecessary administrative access at the end.    Pasted text
+26. groups — Show Group Membership
+The video introduces:
+groups username
+
+This shows the groups that a user belongs to.
+For the current user:
+groups
+
+Groups are important because they can determine what permissions/access a user receives.
+The video demonstrates that membership in the sudo group can provide sudo privileges.    Pasted text
+27. Groups
+Linux uses groups to organize users and assign permissions.
+A user can belong to multiple groups.
+Think:
+User
+ ├── personal group
+ ├── sudo group
+ └── other groups
+
+This makes managing permissions much easier than configuring every user individually.
+28. groupadd — Create a Group
+Syntax:
+sudo groupadd groupname
+
+Example:
+sudo groupadd infinity_gauntlet
+
+This creates a new group.    Pasted text
+29. /etc/group
+Just like:
+/etc/passwd
+
+contains user/account information, Linux has:
+/etc/group
+
+for group information.
+View it with:
+cat /etc/group
+
+You'll see groups and their members.    Pasted text
+30. Adding a User to a Group
+The video uses usermod.
+Basic form:
+sudo usermod -g groupname username
+
+But there's an important difference.
+-g
+Changes the user's primary group.
+It can replace the existing group association.
+31. usermod -aG ⭐
+Usually, if you want to add a user to an additional group, use:
+sudo usermod -aG groupname username
+
+The video explains:
+-a → append
+-G → supplementary group
+
+So:
+sudo usermod -aG infinity_gauntlet ironman
+
+adds Iron Man to the group without removing his existing supplementary group memberships.    Pasted text
+Very important
+-g  → primary group
+-aG → add to supplementary group(s)
+
+32. gpasswd -d — Remove User From Group
+The video introduces:
+sudo gpasswd -d username groupname
+
+Example:
+sudo gpasswd -d thanos infinity_gauntlet
+
+This removes the specified user from the group.    Pasted text
+33. userdel — Delete a User
+To delete a user:
+sudo userdel username
+
+Example:
+sudo userdel thor
+
+The video uses this to remove users from the system.    Pasted text
+Important
+userdel and removing a user from a group are not the same thing.
+userdel
+   ↓
+Delete user account
+
+gpasswd -d
+   ↓
+Remove user from a group
+
+34. groupdel — Delete a Group
+To delete a group:
+sudo groupdel groupname
+
+Example:
+sudo groupdel infinity_gauntlet
+
+This deletes the group itself.
+It does not delete the users who were members of that group.    Pasted text
+🧠 Complete Command List — Video 4
+Here are the commands introduced in the video:
+whoami
+
+adduser
+useradd
+useradd -h
+useradd -m
+
+cat /etc/passwd
+cat /etc/shadow
+sudo cat /etc/shadow
+
+passwd
+sudo passwd username
+
+usermod
+usermod -h
+usermod --shell
+usermod -l
+
+sudo
+
+su
+su - 
+su - username
+sudo su -
+
+groups
+groups username
+
+groupadd
+cat /etc/group
+
+usermod -g
+usermod -aG
+
+gpasswd -d
+
+userdel
+
+groupdel
+
+visudo
+
+📁 Important Files
+File	Purpose
+/etc/passwd	User/account information
+/etc/shadow	Password authentication information
+/etc/group	Group information
+/etc/sudoers	Defines sudo privileges
+
+
+🔥 The Most Important Concepts
+If you don't want to memorize everything today, focus on these:
+1. Users
+whoami
+
+Know who you're logged in as.
+2. Create users
+sudo adduser username
+
+or:
+sudo useradd username
+
+3. Passwords
+sudo passwd username
+
+4. Modify users
+sudo usermod ...
+
+5. Groups
+sudo groupadd groupname
+
+6. Add a user to a group
+sudo usermod -aG groupname username
+
+7. Remove a user from a group
+sudo gpasswd -d username groupname
+
+8. Delete a user
+sudo userdel username
+
+9. Delete a group
+sudo groupdel groupname
+
+10. sudo
+sudo command
+
+→ Run an authorized command with elevated privileges.
+11. su
+su - username
+
+→ Switch to another user.
+12. Sudoers
+/etc/sudoers
+
+→ Controls who can use sudo and what they can do.
+🧩 The Big Picture
+This video connects everything together:
+                    Linux
+                      │
+             ┌────────┴────────┐
+             │                 │
+           Users             Groups
+             │                 │
+       ┌─────┴─────┐           │
+       │           │           │
+    passwd      usermod        │
+       │           │           │
+       └─────┬─────┴───────────┘
+             │
+          Permissions
+             │
+           sudo
+             │
+       /etc/sudoers
+             │
+       Administrative
+          access
+
+And the files:
+/etc/passwd
+     ↓
+Who are the users?
+
+/etc/shadow
+     ↓
+Authentication/password information
+
+/etc/group
+     ↓
+Who belongs to which groups?
+
+/etc/sudoers
+     ↓
+Who is allowed to use sudo?
+
+🎯 What You Learned in Video 4
+## Video 4 — Linux User Management
+
+### Concepts learned
+
+- Linux systems have users.
+- Different users can have different permissions.
+- Root is the superuser with extremely powerful privileges.
+- sudo provides authorized elevated privileges for commands.
+- su allows switching to another user.
+- Linux uses groups to organize users and permissions.
+- A user can belong to multiple groups.
+- The principle of least privilege means giving only the permissions required.
+- /etc/passwd stores user/account information.
+- /etc/shadow stores password authentication information.
+- /etc/group stores group information.
+- /etc/sudoers controls sudo privileges.
+
+### Commands learned
+
+whoami
+adduser
+useradd
+useradd -h
+useradd -m
+passwd
+usermod
+usermod -h
+usermod --shell
+usermod -l
+sudo
+su
+groups
+groupadd
+gpasswd -d
+userdel
+groupdel
+visudo
+
+### Most important commands to remember
+
+sudo
+adduser
+useradd
+passwd
+usermod
+groups
+groupadd
+userdel
+groupdel
+su
+
+### Most important concept
+
+Users → Groups → Permissions → sudo
+
+Linux user management is fundamental to system administration
+and cybersecurit
