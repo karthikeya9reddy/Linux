@@ -11,6 +11,17 @@ Linux Package Management — Video 5
         │                                │
  dependencies ❌              dependencies ✅
 
+apt
+ ├── install/remove/purge/upgrade
+ ├── search/show/list
+ │
+ ├── snap
+ │
+ ├── pip3 → Python packages
+ ├── gem  → Ruby packages
+ │
+ └── git clone → GitHub repositories
+
 Key idea:
 A package may depend on other packages. apt handles those dependencies automatically.
 2. APT — ⭐ Most important
