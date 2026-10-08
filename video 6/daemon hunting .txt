@@ -1,0 +1,276 @@
+🐧 Linux Services & Process Management — Video 6
+1. The Big Picture
+PROGRAM
+   ↓
+PROCESS
+   ↓
+DAEMON / SERVICE
+   ↓
+systemd
+   ↓
+systemctl
+
+Process
+A process = an instance of a running program.
+Example:
+Open Sublime → process starts
+Close Sublime → process ends
+
+Interactive programs like nano and Sublime create interactive processes.
+Daemon / Service
+A daemon is a process that runs in the background without requiring direct interaction.
+Examples:
+sshd  → SSH service
+ntpd  → Network Time Protocol
+
+A daemon commonly has a d at the end of its name.
+2. Viewing Processes
+ps
+ps aux
+
+Shows running processes.
+You can filter the output:
+ps aux | grep <name>
+
+Examples:
+ps aux | grep ssh
+ps aux | grep ntp
+
+Process ID — PID
+Every process has a PID (Process ID).
+systemd is normally:
+PID 1
+
+3. systemd — ⭐ Very Important
+systemd
+   │
+   ├── starts services
+   ├── stops services
+   ├── restarts services
+   └── manages services
+
+It has two major jobs in the video:
+1. Service manager
+2. Init system
+During boot:
+Boot
+ ↓
+Kernel
+ ↓
+systemd (PID 1)
+ ↓
+starts/manages other services
+
+The video demonstrates this relationship with:
+pstree
+
+which shows the process tree.
+4. systemctl — ⭐ Most Important Command
+systemctl is the command-line tool used to control services managed by systemd.
+systemd → manages services
+systemctl → tells systemd what to do
+
+Start / Stop
+sudo systemctl start <service>
+sudo systemctl stop <service>
+
+Example:
+sudo systemctl start sshd
+sudo systemctl stop sshd
+
+Restart
+sudo systemctl restart <service>
+
+Stops and starts the service again.
+Useful when you want to restart a service completely.
+Reload
+sudo systemctl reload <service>
+
+Reloads the service's configuration without completely restarting it, if that service supports reload.
+Reload-or-restart
+sudo systemctl reload-or-restart <service>
+
+Reload if possible; otherwise restart.
+5. Check Service Status
+sudo systemctl status <service>
+
+Example:
+sudo systemctl status ssh
+
+Look for:
+Active: active (running)
+
+or:
+Active: inactive (dead)
+
+6. Enable / Disable at Boot
+This is an extremely important distinction:
+sudo systemctl enable <service>
+
+→ Start automatically when the system boots.
+sudo systemctl disable <service>
+
+→ Don't automatically start it at boot.
+Important:
+enable does NOT start the service immediately.
+So:
+sudo systemctl enable ssh
+
+means:
+Next boot → SSH starts automatically
+
+To start it right now:
+sudo systemctl start ssh
+
+Or do both:
+sudo systemctl enable --now ssh
+
+7. Check Active / Enabled State
+sudo systemctl is-active <service>
+
+Checks whether it's currently running.
+sudo systemctl is-enabled <service>
+
+Checks whether it is configured to start at boot.
+Think:
+is-active  → Is it running NOW?
+is-enabled → Will it start automatically?
+
+8. systemd Units
+systemd calls the things it manages units.
+Unit
+ ├── service
+ ├── socket
+ ├── target
+ ├── timer
+ ├── mount
+ └── device
+
+For this video, we're mainly concerned with:
+.service
+
+Example:
+ssh.service
+ntp.service
+
+You can often omit .service:
+sudo systemctl status ssh
+
+is understood as:
+sudo systemctl status ssh.service
+
+9. List Services
+Active units
+sudo systemctl list-units
+
+Only services
+sudo systemctl list-units --type=service
+
+You can filter:
+sudo systemctl list-units --type=service | grep nginx
+
+All unit files
+This is important when a service isn't currently loaded/active:
+sudo systemctl list-unit-files
+
+Example:
+sudo systemctl list-unit-files | grep nginx
+
+This is the command the video uses to find the disabled nginx service.
+10. Troubleshooting Services
+When something fails:
+sudo systemctl status <service>
+
+For systemd logs:
+sudo journalctl -xe
+
+Basic troubleshooting flow
+Service fails
+     ↓
+systemctl status
+     ↓
+Look at the error
+     ↓
+journalctl -xe
+     ↓
+Find the actual problem
+
+The video demonstrates this with nginx.
+Nginx failed because port 80 was already being used by another service, so nginx couldn't bind to that port.
+11. Nginx Example From the Video
+Find it:
+sudo systemctl list-unit-files | grep nginx
+
+Check it:
+sudo systemctl status nginx
+
+Enable it at boot:
+sudo systemctl enable nginx
+
+Start it now:
+sudo systemctl start nginx
+
+If it fails:
+sudo systemctl status nginx
+sudo journalctl -xe
+
+⭐ The Core Cheat Sheet
+If you only memorize one section from Video 6, make it this:
+# Processes
+ps aux
+ps aux | grep <name>
+pstree
+
+# Service status
+sudo systemctl status <service>
+
+# Control
+sudo systemctl start <service>
+sudo systemctl stop <service>
+sudo systemctl restart <service>
+sudo systemctl reload <service>
+
+# Boot configuration
+sudo systemctl enable <service>
+sudo systemctl disable <service>
+
+# Both start now + enable at boot
+sudo systemctl enable --now <service>
+
+# Check state
+sudo systemctl is-active <service>
+sudo systemctl is-enabled <service>
+
+# List
+sudo systemctl list-units
+sudo systemctl list-units --type=service
+sudo systemctl list-unit-files
+
+# Logs
+sudo journalctl -xe
+
+🧠 Remember this map
+ps
+ ↓
+See processes
+
+systemd
+ ↓
+Manages services
+
+systemctl
+ ↓
+Control services
+
+journalctl
+ ↓
+Troubleshoot/logs
+
+And the most important distinction from this video:
+start   → start NOW
+stop    → stop NOW
+
+enable  → start automatically at BOOT
+disable → don't start automatically at BOOT
+
+enable --now → enable + start NOW
