@@ -53,6 +53,7 @@ Python	python3 -m http.server 7600	7600
 PHP	php -S 127.0.0.1:8085	8085
 Node.js	npx http-server -p 8086	8086
 Apache	apache2 service	8080 in the video after configuration
+sudo nano /etc/apache2/ports.conf
 The Apache example changes its listening port because port 80 is already occupied by the lab environment. Your own Apache configuration may differ.
 Key concept: One computer or VM can run multiple web-server processes. Each needs a distinct listening endpoint—typically a different port when using the same IP address.
 Also, Python's basic HTTP server serves files; it does not execute PHP code. Each server must support the kind of content you want to host.
