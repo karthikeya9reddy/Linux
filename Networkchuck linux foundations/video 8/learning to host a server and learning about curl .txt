@@ -1,0 +1,212 @@
+NetworkChuck — Video 8: Web Servers and curl
+Quick revision notes · Based on your transcript and your practical experiments
+1. Start a web server with one command
+Python can launch a basic HTTP server without installing a separate web-server package.
+python3 -m http.server
+
+
+- Default port: 8000.
+- Serves files from the current working directory.
+- Displays a directory listing if there's no index page.
+- Keep the terminal open while the server runs.
+- Press Ctrl + C to stop it.
+Specify a different port:
+python3 -m http.server 7600
+
+
+Specify the listening address too:
+python3 -m http.server 8085 --bind 0.0.0.0
+
+
+The last command listens on all local IPv4 interfaces, which can allow other reachable devices to connect.
+2. Create a simple website
+The video creates a folder and an HTML page:
+mkdir website
+cd website
+nano index.html
+
+
+Enter some HTML, for example:
+<!DOCTYPE html>
+<html>
+<head>
+    <title>My Website</title>
+</head>
+<body>
+    <h1>Hello!</h1>
+    <p>Welcome to my website.</p>
+</body>
+</html>
+
+
+Save in Nano using Ctrl + X, then Y, then Enter.
+Start the server from inside the website directory:
+python3 -m http.server 7600
+
+
+Open http://127.0.0.1:7600 in your browser.
+Important: The server serves the directory from which you start it. An index.html file is normally served as the homepage; without one, Python's server may show a directory listing.
+3. Run multiple web servers on one machine
+NetworkChuck demonstrates that you can run different server processes on separate ports.
+Server	Command / service	Example port
+Python	python3 -m http.server 7600	7600
+PHP	php -S 127.0.0.1:8085	8085
+Node.js	npx http-server -p 8086	8086
+Apache	apache2 service	8080 in the video after configuration
+The Apache example changes its listening port because port 80 is already occupied by the lab environment. Your own Apache configuration may differ.
+Key concept: One computer or VM can run multiple web-server processes. Each needs a distinct listening endpoint—typically a different port when using the same IP address.
+Also, Python's basic HTTP server serves files; it does not execute PHP code. Each server must support the kind of content you want to host.
+4. The curl command — very important
+curl is a command-line tool for making requests to URLs. In this video, NetworkChuck uses it to communicate with web servers without opening a browser.
+Command	Purpose
+curl http://127.0.0.1:7600	Requests a webpage and displays the response body
+curl -o page.html http://127.0.0.1:8080	Saves the response body to page.html
+curl -I http://127.0.0.1:8080	Requests response headers only, using HTTP HEAD
+curl -v http://127.0.0.1:8080	Shows detailed connection and request/response information
+Example:
+curl http://127.0.0.1:8080
+
+
+Instead of seeing the formatted webpage, you'll usually see its HTML source in the terminal.
+Save the response to a file:
+curl -o page.html http://127.0.0.1:8080
+cat page.html
+
+
+Inspect response headers:
+curl -I http://127.0.0.1:8080
+
+
+Inspect the conversation in detail:
+curl -v http://127.0.0.1:8080
+
+
+What are HTTP headers?
+Headers carry information about an HTTP request or response. Examples include the server software, content type, and content length.
+With curl -v:
+- Lines prefixed with > generally show outgoing request information.
+- Lines prefixed with < generally show incoming response information.
+HTTP methods and status codes
+- GET: Requests a resource, such as a webpage.
+- POST: Sends data to a server, commonly to submit a form or create a resource.
+- 200 OK: The request succeeded.
+- 404 Not Found: The requested resource could not be found.
+- 500 Internal Server Error: The server encountered an error while processing the request.
+5. wget — another downloading tool
+The video also introduces wget:
+wget http://127.0.0.1:7600
+
+
+It downloads a resource to a local file. curl and wget overlap in some capabilities, but curl is especially useful for inspecting HTTP communication and testing APIs.
+6. Your own hands-on activities 🔥
+These are the activities you completed while learning alongside the video. They're separate from the exact demonstrations in NetworkChuck's transcript.
+Your practical lab checklist
+8 activities
+
+[x] Ran four web servers
+Started PHP, Python, Node.js http-server, and Apache2 on your Parrot OS VM using separate ports.
+
+
+[x] Inspected listening ports
+Used `ss -ltnp` to identify listening TCP ports and the associated processes.
+
+
+[x] Found your VM IP address
+Used `ip -br addr` and identified `10.0.2.15` before changing the VirtualBox network mode.
+
+
+[x] Changed VirtualBox networking
+Switched from NAT to Bridged Adapter, then obtained a new VM IP address.
+
+
+[x] Opened your website on your phone
+Accessed the server through the VM's IP address while the phone and VM were on the same Wi-Fi network.
+
+
+[x] Compared loopback and wildcard binding
+Learned why `127.0.0.1` is local-only and how binding to `0.0.0.0` permits listening on other local IPv4 interfaces.
+
+
+[x] Observed real HTTP requests
+Refreshed the website on your phone and watched timestamps and request entries appear in the server terminal.
+
+
+[x] Connected DNS to web hosting
+Learned that an IP address can be used directly without a DNS lookup, while domain names typically require name resolution.
+
+
+
+What you learned from the activity
+Concept	Meaning
+127.0.0.1	Loopback address; a server bound only here accepts connections through the same machine's loopback interface.
+0.0.0.0	Wildcard IPv4 listening address; listens on all local IPv4 interfaces. It is not the address to type into another device's browser.
+VM IP address	The network address another device can use to reach the VM if the network permits it.
+Port	Identifies the listening endpoint for a service on an IP address.
+Server log	Records requests received by the server, which helps with troubleshooting and investigation.
+DNS	Resolves domain names to IP addresses; it does not start a server or select its listening port.
+Why mobile data didn't work: your phone could reach the VM on the local Wi-Fi network, but its private LAN IP wasn't directly reachable over the mobile carrier's network. Remote access requires additional routing or a secure remote-access setup.
+7. Important questions you asked — with answers
+Q1. Can I run the same website on multiple servers?
+Yes. You can serve copies of the same static website from multiple server processes or machines. Each server must be configured to serve the files, and dynamic applications may need additional configuration and shared data.
+
+Q2. Are my four websites running on the same server or different servers?
+They're running as separate server processes on the same Parrot OS VM. If each serves different content, you can access four different sites through their respective ports.
+
+Q3. Why can my phone access the website using the VM IP but not 127.0.0.1?
+Because 127.0.0.1 refers to the device you're using. On your phone, it means the phone itself—not your Parrot VM.
+
+Q4. Why use 0.0.0.0 instead of 127.0.0.1?
+Use 127.0.0.1 for loopback-only access. Use 0.0.0.0 when the server needs to listen on all local IPv4 interfaces, such as when testing access from your phone. Network and firewall settings still determine reachability.
+
+Q5. Why does the terminal show activity whenever I refresh the website?
+Each refresh typically generates a new HTTP request. The server logs information such as the request path, timestamp, and status code.
+
+Q6. Is DNS involved when I access a website by IP address?
+Usually, no DNS lookup is required to resolve the destination when you enter an IP address directly. Domain names generally need DNS resolution, unless a cached or otherwise available mapping can be used.
+
+Q7. What is ss -ltnp useful for?
+It shows listening TCP sockets and, where permitted, the processes associated with them. It's useful for checking which services are listening on which ports.
+
+
+8. Final quick-revision cheat sheet
+Copy this section into your Linux notes.
+# Start a Python web server
+python3 -m http.server 8000
+
+# Choose a port and listen on all IPv4 interfaces
+python3 -m http.server 8085 --bind 0.0.0.0
+
+# Create a basic website
+mkdir website
+cd website
+nano index.html
+
+# Start PHP development server
+php -S 127.0.0.1:8086
+
+# Start Node.js HTTP server
+npx http-server -p 8087
+
+# Start Apache
+sudo systemctl start apache2
+
+# Inspect listening ports and processes
+sudo ss -ltnp
+
+# Find network interface addresses
+ip -br addr
+
+# Request a webpage
+curl http://127.0.0.1:8085
+
+# Download a response to a file
+curl -o page.html http://127.0.0.1:8085
+
+# Inspect response headers
+curl -I http://127.0.0.1:8085
+
+# Show detailed HTTP communication
+curl -v http://127.0.0.1:8085
+
+# Download a resource
+wget http://127.0.0.1:8085
