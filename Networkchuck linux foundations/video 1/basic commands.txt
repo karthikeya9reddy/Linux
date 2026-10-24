@@ -1,0 +1,103 @@
+# Linux Day 1 — Terminal Basics
+
+## Environment
+
+- OS: Parrot Security OS
+- Virtualization: VirtualBox
+- Purpose: Linux fundamentals for cybersecurity
+- Course: NetworkChuck — Linux for Hackers
+
+---
+
+## What I Learned
+
+Today I learned the basics of navigating the Linux filesystem using the terminal.
+
+The terminal allows me to interact with the operating system using commands instead of relying entirely on a graphical interface.
+
+### 1. `pwd`
+
+`pwd` means **Print Working Directory**.
+
+It tells me where I currently am in the filesystem.
+
+```bash
+pwd
+
+Example:
+/home/parrot
+
+2. ls
+ls lists the files and directories in my current location.
+ls
+
+Example:
+Desktop  Documents  Downloads  Music  Pictures
+
+3. cd
+cd means Change Directory.
+It allows me to move between directories.
+cd Downloads
+
+To move back to the parent directory:
+cd ..
+
+4. clear
+clear clears the visible text from the terminal.
+clear
+
+It does not close the terminal or delete anything.
+I can also use:
+Ctrl + L
+
+to clear the terminal screen.
+Basic Navigation
+The basic idea is:
+pwd → Where am I?
+ls  → What's here?
+cd  → Where do I want to go?
+
+Example:
+pwd
+ls
+cd Downloads
+pwd
+ls
+cd ..
+pwd
+
+This allows me to navigate through the filesystem entirely from the terminal.
+Important Concept
+Linux has a filesystem organized into directories.
+Instead of clicking through folders using a graphical file manager, I can navigate through them using terminal commands.
+For example:
+/home
+   └── user
+       ├── Documents
+       ├── Downloads
+       ├── Pictures
+       └── Projects
+
+I can move through this structure using cd and inspect it using ls.
+Practice
+I practiced using the terminal instead of just watching the commands being demonstrated.
+A useful challenge is:
+Starting from my home directory, navigate to the Downloads directory and then return to the home directory using only the commands learned today.
+
+What I Learned Today
+- The Linux terminal can be used to navigate the filesystem.
+- pwd shows my current location.
+- ls shows what is inside the current directory.
+- cd moves between directories.
+- cd .. moves to the parent directory.
+- clear and Ctrl + L clear the visible terminal screen.
+- I don't need to close and reopen the terminal when the screen gets cluttered.
+- Linux commands are easier to remember when I actually use and experiment with them.
+Commands Learned
+Command	Purpose
+pwd	Show current directory
+ls	List files/directories
+cd	Change directory
+cd ..	Move to parent directory
+clear	Clear terminal screen
+Ctrl + L	Clear terminal screen
