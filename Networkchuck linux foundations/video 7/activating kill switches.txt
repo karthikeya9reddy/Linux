@@ -1,0 +1,95 @@
+NetworkChuck — Video 7: Process Management 🐧
+1. What is a process?
+A process is a running instance of a program. Opening an application or running a command can create a process.
+Each process has a PID (Process ID) used to identify it.
+2. Finding processes
+Command	Purpose
+ps	Shows processes associated with the current terminal
+ps -u username	Shows processes for a specified user
+ps aux	Lists processes across users, including those not attached to the current terminal
+ps aux \| grep firefox	Searches the process listing for Firefox
+pgrep firefox	Finds matching process IDs by name
+top	Interactive, live process monitor
+htop	Alternative interactive process monitor with a more visual interface
+kill -l	Lists available process signals
+Remember: grep filters text. pgrep searches for processes by name and returns their PIDs.
+3. Killing processes
+The kill command sends a signal to a process identified by its PID.
+Command	Signal	Purpose
+kill PID	SIGTERM (15)	Requests graceful termination; default signal
+kill -2 PID	SIGINT (2)	Interrupts a process
+kill -19 PID	SIGSTOP (19)	Stops/suspends a process
+kill -18 PID	SIGCONT (18)	Resumes a stopped process
+kill -9 PID	SIGKILL (9)	Forces termination; cannot be caught or ignored
+pkill firefox	Default: SIGTERM	Sends a signal to processes matching a name
+pkill -9 firefox	SIGKILL	Forcefully terminates matching processes
+Important distinction: kill doesn't always mean terminate. It sends a signal, and the signal determines the action.
+Recommended order: try kill PID first. Use kill -9 PID only when necessary.
+4. Foreground vs background processes
+- Foreground: Runs attached to your terminal and occupies it until the command finishes or is stopped.
+- Background: Runs without occupying the terminal in the same way, allowing you to continue using the shell.
+Command / shortcut	Purpose
+Ctrl + C	Interrupts the foreground process (SIGINT)
+Ctrl + Z	Suspends the foreground process (SIGTSTP, typically)
+jobs	Lists jobs managed by the current shell
+bg	Resumes a suspended job in the background
+bg 1	Resumes job 1 in the background
+fg	Brings a job to the foreground
+fg 1	Brings job 1 to the foreground
+command &	Starts a command in the background
+Example workflow:
+ping -c 100 example.com
+
+
+Press Ctrl + Z to suspend it, then:
+jobs
+bg 1
+fg 1
+
+
+Press Ctrl + C when it returns to the foreground to interrupt it.
+PID vs job number: A PID identifies a system process; a job number identifies a job managed by your current shell. For example, kill 1234 uses a PID, whereas fg 1 uses a shell job number.
+5. Process states
+The video introduces common process states:
+- Running: Currently executing or ready to run.
+- Waiting/sleeping: Waiting for an event or resource.
+- Stopped: Suspended, often by a signal.
+- Zombie: A process that has exited but whose exit status has not yet been collected by its parent.
+The video also demonstrates T in the process status column, indicating a stopped or traced process.
+6. Practical workflow
+
+Find the process
+pgrep firefox
+
+
+
+
+
+
+Inspect it
+ps aux | grep firefox
+
+
+
+
+
+
+Request termination
+kill PID
+
+
+
+
+
+Replace PID with the actual process ID. Verify the process before sending a signal, especially when using pkill or kill -9.
+7. What you should remember most
+- ps → inspect processes.
+- pgrep → find process IDs by name.
+- top / htop → monitor resource usage.
+- kill → send a signal to a PID.
+- pkill → send a signal based on process name.
+- Ctrl + C → interrupt; Ctrl + Z → suspend.
+- jobs, bg, fg → manage shell jobs.
+- & → start a command in the background.
+- SIGTERM is the polite request; SIGKILL is the forceful option.
+Small technical correction for your notes: NetworkChuck describes Ctrl + Z as signal 19, but in a typical interactive Bash terminal, Ctrl + Z sends SIGTSTP (usually signal 20 on Linux). SIGSTOP (19 on Linux) is different and cannot be caught or ignored. Also, Ctrl + Z suspends a job; it does not terminate it.
