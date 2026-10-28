@@ -1,0 +1,272 @@
+Linux for Hackers — Video 9 Notes
+1. Navigating directories faster
+Command	What it does
+pwd	Prints your current working directory
+cd /path/to/dir	Changes to a specific directory
+cd /	Goes to the filesystem root
+cd or cd ~	Returns to your home directory
+cd ..	Moves up one directory
+cd ../..	Moves up two directories
+cd -	Returns to the previous working directory
+Ctrl + L	Clears the terminal display
+
+Examples:
+cd /usr
+cd ..
+cd ../..
+cd -
+pwd
+
+
+Remember the difference:
+- / is the filesystem root.
+- ~ represents your home directory.
+- .. means the parent directory.
+- - with cd means the previous directory.
+The transcript also explains the shell variables:
+echo $OLDPWD
+echo $PWD
+
+
+- $OLDPWD — previous working directory.
+- $PWD — current working directory.
+cd - works by switching to the previous directory, which is tracked through OLDPWD.
+2. Listing files and hidden files
+Command	What it does
+ls	Lists directory contents
+ls -l	Shows detailed file information
+ls -a	Includes hidden files
+ls -al	Shows hidden files in detailed format
+
+Example:
+ls -al
+
+
+Linux files whose names begin with a dot, such as .bashrc, are hidden from ordinary ls output.
+Aliases — your own shortcuts
+An alias lets you create a shortcut for a command.
+alias lumos='ls -al'
+
+
+Now you can type:
+lumos
+
+
+This temporary alias works in the current shell session. To make it persistent in Bash, add it to your Bash configuration:
+nano ~/.bashrc
+
+
+Add:
+alias lumos='ls -al'
+
+
+Save and exit. Then reload the configuration:
+source ~/.bashrc
+
+
+Useful detail from the video: ll and la are commonly configured aliases, but they aren't guaranteed to exist on every Linux installation.
+3. Tab completion and command history
+These shortcuts help you navigate and type commands more efficiently.
+- Tab — completes a command or path when possible.
+- Tab twice — shows available matches when completion is ambiguous.
+- ↑ / ↓ — moves through previously entered commands.
+- Ctrl + R — searches command history interactively.
+Example:
+cd /var/lo
+
+
+Press Tab to complete the path if the match is unambiguous. If multiple matches exist, press Tab twice to see the possibilities.
+
+For reverse history search, press Ctrl + R, type part of a previous command, and continue pressing Ctrl + R to search older matches. Press the right arrow to bring the displayed command back to the prompt.
+4. Editing commands without retyping everything
+These Bash keyboard shortcuts are among the most useful parts of the video.
+Shortcut	Action
+Ctrl + A	Move cursor to the beginning of the command line
+Ctrl + E	Move cursor to the end of the command line
+Ctrl + U	Remove text before the cursor
+Ctrl + K	Remove text from the cursor to the end
+Ctrl + Y	Restore or paste text removed by Ctrl + U or Ctrl + K
+Alt + Backspace	Delete the word immediately before the cursor
+Ctrl + X, then E	Open the current command in the configured editor in Bash environments supporting this shortcut
+
+Example: you've typed a long command and want to return to its beginning.
+1. Press Ctrl + A.
+2. Edit the beginning.
+3. Press Ctrl + E to jump back to the end.
+Copy and paste in the terminal
+In the terminal environment demonstrated in the video:
+- Ctrl + Shift + C — copy selected text.
+- Ctrl + Shift + V — paste text.
+These shortcuts depend on your terminal application. For example, Termux has its own touch-based copy/paste controls.
+5. Reading large log files
+The video introduces three commands that are particularly useful for Linux administration and cybersecurity.
+Command	Purpose
+cat file	Prints file contents; can be unwieldy for large files
+less file	Views a file one screen at a time
+tail file	Displays the last 10 lines by default
+tail -f file	Follows new lines as they are appended
+
+Example from the transcript:
+sudo less /var/log/auth.log
+
+
+To display only the latest entries:
+sudo tail /var/log/auth.log
+
+
+To monitor new entries as they arrive:
+sudo tail -f /var/log/auth.log
+
+
+Press q to exit less. Press Ctrl + C to stop a running tail -f.
+
+Why this matters for cybersecurity: Logs can show authentication attempts and other system activity. less is useful for investigating existing entries, while tail -f helps you monitor events as they occur.
+
+The transcript uses /var/log/auth.log in its examples. On some modern Linux systems, authentication logs may instead be accessed through the system journal.
+6. Reusing the previous command with !!
+Suppose you run a command and receive Permission denied because you forgot sudo.
+
+You can run:
+sudo !!
+
+
+!! expands to the most recently executed command, so this reruns it with sudo.
+
+For example, if your previous command was:
+less /var/log/auth.log
+
+
+then:
+sudo !!
+
+
+effectively runs:
+sudo less /var/log/auth.log
+
+
+Important: Check what the previous command does before rerunning it with elevated privileges. sudo !! is convenient, but it can also rerun a destructive command.
+7. The complete quick-revision cheat sheet
+
+Navigation
+pwdShow current directory
+
+
+e
+cdGo hom
+ 
+
+
+
+cd /                                       Go to filesystem root
+
+
+ 
+
+cd ..                                       Go up one directory
+
+
+
+
+cd ../..                                     Go up two directories
+
+ 
+
+
+cd -                                         Return to previous directory
+
+
+
+
+Files and aliases
+
+ls -l                                       Detailed listing
+
+ 
+
+
+ls -al                                       Detailed listing including hidden files
+
+ 
+
+
+alias lumos='ls -al'                         Create a temporary shortcut
+
+
+
+
+nano ~/.bashrc                              Edit Bash configuration
+
+
+
+
+source ~/.bashrc                           Reload Bash configuration
+
+
+
+
+Keyboard shortcuts
+
+Ctrl + L                                 Clear terminal display
+
+ 
+
+
+Tab                                    Complete command or path
+
+ 
+
+
+Tab Tab                                 Show possible matches
+
+ 
+
+
+↑ / ↓                                 Browse command history
+
+
+
+
+Ctrl + R                             Search command history
+
+ 
+
+
+Ctrl + A / Ctrl + E                Jump to beginning / end
+
+ 
+
+
+Ctrl + U / Ctrl + K               Remove text before / after cursor
+
+ 
+
+
+Ctrl + Y                          Restore removed text
+
+ 
+
+
+Alt + Backspace                  Delete previous word
+
+ 
+
+
+Logs and command reuse
+
+less FILE                        Browse a file
+
+ 
+
+
+tail FILE                        Show last 10 lines
+
+ 
+
+
+tail -f FILE                     Follow new log entries
+
+ 
+
+
+sudo !!                         Rerun last command with sudo
+
