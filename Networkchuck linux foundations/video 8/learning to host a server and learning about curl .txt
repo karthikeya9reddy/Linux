@@ -1,4 +1,4 @@
-NetworkChuck — Video 8: Web Servers and curl
+ NetworkChuck — Video 8: Web Servers and curl
 Quick revision notes · Based on your transcript and your practical experiments
 1. Start a web server with one command
 Python can launch a basic HTTP server without installing a separate web-server package.
