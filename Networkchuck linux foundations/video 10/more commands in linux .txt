@@ -1,0 +1,243 @@
+Linux for Hackers — Video 10 Notes
+Final video completed
+ Quick revision notes
+
+1. Creating files with touch
+The touch command creates an empty file if it doesn't already exist.
+touch file.txt
+
+
+Create multiple files at once:
+touch file1.txt file2.txt file3.txt file4.txt
+
+
+Check them:
+ls
+
+
+Important: If the file already exists, touch updates its timestamps rather than deleting its contents.
+2. Creating files with content
+The video demonstrates three approaches using cat and echo.
+
+Method A — cat with input redirection
+cat > file.txt
+
+
+Now type your content:
+Hello Linux!
+I am learning Linux.
+
+
+Press Ctrl + D to finish and save the input.
+
+Method B — Here-document
+cat << EOF > file.txt
+Hello Linux!
+This is my second line.
+I am practising Linux.
+EOF
+
+
+The shell keeps accepting input until it encounters the ending marker EOF.
+
+You can use another marker instead of EOF, as long as the ending marker matches.
+
+Method C — echo with redirection
+echo "Hello Linux!" > file.txt
+
+
+This creates the file with the supplied text.
+
+Redirection reminder: > creates or overwrites a file. >> appends to an existing file instead.
+3. Creating directories with mkdir
+mkdir stands for make directory.
+mkdir coolstuff
+
+
+Create multiple directories:
+mkdir folder1 folder2 folder3
+
+
+Creating nested directories with mkdir -p
+This is an especially important command from the video.
+mkdir -p parent/child/grandchild
+
+
+It creates the parent and all required child directories in one command.
+
+The -p option means parents: create missing parent directories as necessary.
+4. Understanding files vs directories
+The video demonstrates checking the first character in ls -l output.
+
+Example:
+ls -l
+
+
+First character	Meaning
+d	Directory
+-	Regular file
+
+For example:
+drwxr-xr-x  coolstuff
+-rw-r--r--  file.txt
+
+
+The first entry is a directory, while the second is a regular file.
+
+This is more reliable than depending on file-manager colours.
+5. Moving files with mv
+mv stands for move.
+
+Syntax:
+mv source destination
+
+
+Move a file into a directory:
+mv file.txt ./coolstuff/
+
+
+Here:
+- . means the current directory.
+- ./coolstuff/ means the coolstuff directory inside the current directory.
+Move and rename at the same time
+mv stuff.txt ./coolstuff/newname.txt
+
+
+This moves stuff.txt into coolstuff and renames it to newname.txt.
+Move multiple files
+mv file1.txt file2.txt file3.txt ./coolstuff/
+
+
+All three files move into the destination directory.
+
+Remember: mv can move both files and directories.
+6. Copying files with cp
+cp stands for copy.
+cp file.txt ./coolstuff/
+
+
+The original file remains in its original location, and a copy is created in the destination.
+Copy and rename
+cp file.txt ./coolstuff/backup.txt
+
+
+Create a backup in the same directory
+cp file.txt file.txt.bk
+
+
+Now you have the original and a backup.
+Copying directories with cp -R
+This is an important difference.
+
+If you try:
+cp coolstuff destination/
+
+
+and coolstuff contains files, the command will complain that recursive copying is required.
+
+Use:
+cp -R coolstuff destination/
+
+
+-R means recursive: copy the directory and its contents, including nested directories.
+7. Viewing directory structures with tree
+The video introduces the tree command to visualise nested directories.
+tree
+
+
+It displays files and directories in a tree-like structure.
+
+For example:
+homeserver/
+├── movie1.mp4
+├── movie2.mp4
+└── shows/
+    ├── season1/
+    │   ├── episode1.mp4
+    │   └── episode2.mp4
+    └── season2/
+
+
+This is particularly useful when working with large directory structures.
+
+If tree isn't installed on your distribution, install it using the appropriate package manager.
+8. Removing files and directories
+The video moves on to deletion commands.
+Remove a file
+rm file.txt
+
+
+Remove multiple files
+rm file1.txt file2.txt file3.txt
+
+
+Remove an empty directory
+rmdir emptyfolder
+
+
+rmdir only removes empty directories.
+
+If a directory contains files, it will fail.
+Remove a directory and its contents
+rm -r foldername
+
+
+-r means recursive. It removes the directory and its contents, including nested directories.
+Destructive command
+Understanding rm -rf
+The video also demonstrates:
+rm -rf
+
+
+- -r = recursively remove directories and their contents.
+- -f = force removal, suppressing many confirmation prompts and ignoring nonexistent files.
+The transcript then demonstrates an even more dangerous command:
+rm -rf --no-preserve-root /
+
+
+NEVER run this on your Parrot OS, Android environment, personal computer, or any real system.
+
+It attempts to recursively delete the entire filesystem, including essential system files. The video uses a disposable Hack The Box lab to demonstrate how Linux can be destroyed.
+
+This is a demonstration of destructive behaviour, not a normal administration technique.
+9. The million-directory experiment
+This is the unusual experiment that gives the video its title.
+
+The creator uses:
+mkdir -p
+
+
+to create nested directories.
+
+He discovers that the lab environment has a limit on how many child directories can be created in one operation, approximately 600 in his experiment.
+
+He then uses a Bash script with a for loop to repeatedly create more parent and child directories.
+
+The final reported count is:
+1,116,017
+Directories created in the Hack The Box lab, according to the video.
+
+The lesson isn't that you should create a million directories yourself. It's that:
+- Directories can be nested.
+- mkdir -p can create parent and child paths.
+- Bash loops can automate repetitive operations.
+- Large filesystem operations can consume resources and cause performance problems.
+10. Complete command cheat sheet
+Save this section for quick revision.
+Command	Purpose
+touch file.txt	Create an empty file
+cat > file.txt	Create a file and enter content
+cat << EOF > file.txt	Create a multiline file
+echo "text" > file.txt	Create a file with one line
+mkdir folder	Create a directory
+mkdir -p a/b/c	Create nested directories
+ls -l	Detailed file listing
+mv file folder/	Move a file
+mv old.txt new.txt	Rename a file
+cp file folder/	Copy a file
+cp -R folder destination/	Copy a directory recursively
+tree	Display directory structure
+rm file.txt	Delete a file
+rmdir folder	Delete an empty directory
+rm -r folder	Delete a directory and its contents
+rm -rf folder	Force recursive removal
