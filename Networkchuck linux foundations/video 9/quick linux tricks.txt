@@ -14,7 +14,7 @@ Examples:
 cd /usr
 cd ..
 cd ../..
-cd -
+cd -  
 pwd
 
 
